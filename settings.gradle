@@ -1,0 +1,3 @@
+rootProject.name='charter-esim-android-library'
+include ':app'
+include ':esimlibrary'

@@ -38,14 +38,19 @@ class EsimHandler(val onSuccess: (result: String) -> Unit, val onFailure: () -> 
                 val detailedCode = intent?.getIntExtra(
                     EuiccManager.EXTRA_EMBEDDED_SUBSCRIPTION_DETAILED_CODE, 0)
                 Log.d(TAG_ESIM, "onReceive: detailedCode: $detailedCode")
+                Log.d(TAG_ESIM, "onReceive: resultCode: $resultCode")
 
                 if (resultCode == EuiccManager.EMBEDDED_SUBSCRIPTION_RESULT_OK) { /*Download profile was successful*/
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         // eSim is active
-                        onSuccess("Download is successful and eSim is active")
+                        context?.getString(R.string.on_success_response_active_esim)?.let {
+                            onSuccess(it)
+                        }
                     } else {
                         // eSim is inactive due to the SDK does not support this API level
-                        onSuccess("Download is successful, but eSim is inactive due to the SDK does not support this API level")
+                        context?.getString(R.string.on_success_response_inactive_esim)?.let {
+                            onSuccess(it)
+                        }
                     }
                 } else { /*Download profile was not successful*/
                     onFailure()
